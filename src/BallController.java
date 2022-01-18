@@ -3,7 +3,7 @@ public class BallController {
     Rect ball, leftPaddle, rightPaddle;
 
     private double xVelocity = -150.0;
-    private double yVelocity = 10.0;
+    private double yVelocity = 25.0;
 
     public BallController(Rect ball, Rect leftPaddle, Rect rightPaddle){
         this.ball = ball;

@@ -10,6 +10,7 @@ public class Window extends JFrame implements Runnable {
     public Rect ai;
     public Rect ball;
     public PlayerController playerController;
+    public AIController aiController;
     public BallController ballController;
 
     public Window(){
@@ -18,6 +19,7 @@ public class Window extends JFrame implements Runnable {
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
         Constants.TOOLBAR_HEIGHT = this.getInsets().top;
         Constants.INSETS_BOTTOM = this.getInsets().bottom;
 
@@ -30,6 +32,7 @@ public class Window extends JFrame implements Runnable {
         ball = new Rect(Constants.SCREEN_WIDTH/2,Constants.SCREEN_HEIGHT/2,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
 
         playerController = new PlayerController(player, inputHandler);
+        aiController = new AIController(ai, ball);
         ballController = new BallController(ball, player, ai);
     }
 
@@ -40,6 +43,7 @@ public class Window extends JFrame implements Runnable {
         graphics.drawImage(dbImage,0,0,this);
 
         playerController.update(dt);
+        aiController.update(dt);
         ballController.update(dt);
     }
 
