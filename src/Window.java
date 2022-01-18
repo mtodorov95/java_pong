@@ -4,11 +4,12 @@ import java.awt.event.KeyEvent;
 
 public class Window extends JFrame implements Runnable {
 
-    Graphics2D graphics;
-    InputHandler inputHandler = new InputHandler();
-    Rect player;
-    Rect ai;
-    Rect ball;
+    public Graphics2D graphics;
+    public InputHandler inputHandler = new InputHandler();
+    public Rect player;
+    public Rect ai;
+    public Rect ball;
+    public PlayerController playerController;
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -16,6 +17,8 @@ public class Window extends JFrame implements Runnable {
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Constants.TOOLBAR_HEIGHT = this.getInsets().top;
+        Constants.INSETS_BOTTOM = this.getInsets().bottom;
 
         graphics = (Graphics2D) this.getGraphics();
 
@@ -24,15 +27,28 @@ public class Window extends JFrame implements Runnable {
         player = new Rect(30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
         ai = new Rect(Constants.SCREEN_WIDTH-Constants.PLAYER_WIDTH-30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
         ball = new Rect(Constants.SCREEN_WIDTH/2,Constants.SCREEN_HEIGHT/2,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
+
+        playerController = new PlayerController(player, inputHandler);
     }
 
     public void update(double dt){
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(0,0,Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
+        Image dbImage = createImage(getWidth(), getHeight());
+        Graphics dbg = dbImage.getGraphics();
+        this.draw(dbg);
+        graphics.drawImage(dbImage,0,0,this);
 
-        player.draw(graphics);
-        ai.draw(graphics);
-        ball.draw(graphics);
+        playerController.update(dt);
+    }
+
+    public void draw(Graphics context){
+        Graphics2D g = (Graphics2D) context;
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
+
+        player.draw(g);
+        ai.draw(g);
+        ball.draw(g);
     }
 
     @Override
@@ -45,7 +61,7 @@ public class Window extends JFrame implements Runnable {
             lastFrame = now;
             update(deltaTime);
 
-            // Cap FPS to 30
+            // Cap FPS
             try{
                 Thread.sleep(Constants.FPS);
             }catch (Exception e){

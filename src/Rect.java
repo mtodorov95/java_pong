@@ -1,11 +1,13 @@
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class Rect {
 
-    private int x, y, width, height;
+    public double x, y;
+    public double width, height;
     private Color color;
 
-    public Rect(int x, int y, int width, int height, Color color){
+    public Rect(double x, double y, double width, double height, Color color){
         this.x = x;
         this.y = y;
         this.width = width;
@@ -15,6 +17,6 @@ public class Rect {
 
     public void draw(Graphics2D context){
         context.setColor(color);
-        context.fillRect(x,y,width,height);
+        context.fill(new Rectangle2D.Double(x,y,width,height));
     }
 }
