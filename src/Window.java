@@ -6,6 +6,9 @@ public class Window extends JFrame implements Runnable {
 
     Graphics2D graphics;
     InputHandler inputHandler = new InputHandler();
+    Rect player;
+    Rect ai;
+    Rect ball;
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -17,17 +20,19 @@ public class Window extends JFrame implements Runnable {
         graphics = (Graphics2D) this.getGraphics();
 
         this.addKeyListener(inputHandler);
+
+        player = new Rect(30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
+        ai = new Rect(Constants.SCREEN_WIDTH-Constants.PLAYER_WIDTH-30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
+        ball = new Rect(Constants.SCREEN_WIDTH/2,Constants.SCREEN_HEIGHT/2,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
     }
 
     public void update(double dt){
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0,Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
 
-        if (inputHandler.isKeyPressed(KeyEvent.VK_W)){
-            System.out.println("Pressing W");
-        }else if (inputHandler.isKeyPressed(KeyEvent.VK_S)){
-            System.out.println("Pressing S");
-        }
+        player.draw(graphics);
+        ai.draw(graphics);
+        ball.draw(graphics);
     }
 
     @Override
