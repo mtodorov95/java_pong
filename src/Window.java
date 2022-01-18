@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Window extends JFrame implements Runnable {
 
     Graphics2D graphics;
+    InputHandler inputHandler = new InputHandler();
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -13,11 +15,19 @@ public class Window extends JFrame implements Runnable {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         graphics = (Graphics2D) this.getGraphics();
+
+        this.addKeyListener(inputHandler);
     }
 
     public void update(double dt){
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0,Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
+
+        if (inputHandler.isKeyPressed(KeyEvent.VK_W)){
+            System.out.println("Pressing W");
+        }else if (inputHandler.isKeyPressed(KeyEvent.VK_S)){
+            System.out.println("Pressing S");
+        }
     }
 
     @Override
