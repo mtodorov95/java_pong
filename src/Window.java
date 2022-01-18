@@ -10,6 +10,7 @@ public class Window extends JFrame implements Runnable {
     public Rect ai;
     public Rect ball;
     public PlayerController playerController;
+    public BallController ballController;
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -29,6 +30,7 @@ public class Window extends JFrame implements Runnable {
         ball = new Rect(Constants.SCREEN_WIDTH/2,Constants.SCREEN_HEIGHT/2,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
 
         playerController = new PlayerController(player, inputHandler);
+        ballController = new BallController(ball, player, ai);
     }
 
     public void update(double dt){
@@ -38,6 +40,7 @@ public class Window extends JFrame implements Runnable {
         graphics.drawImage(dbImage,0,0,this);
 
         playerController.update(dt);
+        ballController.update(dt);
     }
 
     public void draw(Graphics context){
@@ -62,11 +65,11 @@ public class Window extends JFrame implements Runnable {
             update(deltaTime);
 
             // Cap FPS
-            try{
-                Thread.sleep(Constants.FPS);
-            }catch (Exception e){
-                //
-            }
+//            try{
+//                Thread.sleep(Constants.FPS);
+//            }catch (Exception e){
+//                //
+//            }
         }
     }
 }
