@@ -2,8 +2,8 @@ public class BallController {
 
     Rect ball, leftPaddle, rightPaddle;
 
-    private double xVelocity = -150.0;
-    private double yVelocity = 25.0;
+    private double xVelocity = -100.0;
+    private double yVelocity = 1.0;
 
     public BallController(Rect ball, Rect leftPaddle, Rect rightPaddle){
         this.ball = ball;
@@ -14,15 +14,13 @@ public class BallController {
     public void update(double dt){
         if (xVelocity<0) {
             if (checkCollision(leftPaddle)) {
-                this.xVelocity *= -1;
-                this.yVelocity *= -1;
+                calculateNewVelocity(leftPaddle);
             }else if (this.ball.x < this.leftPaddle.x){
                 System.out.println("AI + 1");
             }
         }else{
             if (checkCollision(rightPaddle)) {
-                this.xVelocity *= -1;
-                this.yVelocity *= -1;
+                calculateNewVelocity(rightPaddle);
             }else if (this.ball.x + this.ball.width > this.rightPaddle.x + this.rightPaddle.width){
                 System.out.println("Player + 1");
             }
@@ -45,5 +43,23 @@ public class BallController {
 
     private boolean checkCollision(Rect other){
         return this.ball.toRectangle().intersects(other.toRectangle());
+    }
+
+    private double getVelocityAngle(Rect paddle){
+        double relativeIntersectY = paddle.getCenterY() - ball.getCenterY();
+        double normIntersectY = relativeIntersectY / (paddle.height/2);
+        double theta = normIntersectY * Constants.MAX_ANGLE;
+
+        return Math.toRadians(theta);
+    }
+
+    private void calculateNewVelocity(Rect paddle){
+        double theta = getVelocityAngle(paddle);
+        double newVx = Math.abs(Math.cos(theta) * Constants.BALL_SPEED);
+        double newVy = -Math.sin(theta) * Constants.BALL_SPEED;
+        double oldSign = Math.signum(xVelocity);
+
+        this.xVelocity = newVx * (-1.0 * oldSign);
+        this.yVelocity = newVy;
     }
 }

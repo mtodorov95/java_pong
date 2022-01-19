@@ -23,4 +23,8 @@ public class Rect {
     public Rectangle2D.Double toRectangle(){
         return new Rectangle2D.Double(x,y,width,height);
     }
+
+    public double getCenterY(){
+        return this.y + (this.height/2.0);
+    }
 }
