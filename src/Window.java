@@ -14,6 +14,7 @@ public class Window extends JFrame implements Runnable {
     public BallController ballController;
     public Text leftScoreText, rightScoreText;
     public int leftScore, rightScore;
+    public boolean isRunning = true;
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -75,21 +76,27 @@ public class Window extends JFrame implements Runnable {
             leftScoreText.text = "" + leftScore;
             if (leftScore >= Constants.WIN_SCORE){
                 System.out.println("You won");
+                Main.changeState(0);
             }
         } else if (ai.equals(paddle)) {
             rightScore++;
             rightScoreText.text = "" + rightScore;
             if (rightScore >= Constants.WIN_SCORE){
                 System.out.println("AI won");
+                Main.changeState(0);
             }
         }
+    }
+
+    public void stop(){
+        isRunning = false;
     }
 
     @Override
     public void run() {
         double lastFrame = 0.0;
 
-        while (true){
+        while (isRunning){
             double now = Timer.getTime();
             double deltaTime = now - lastFrame;
             lastFrame = now;
@@ -102,5 +109,6 @@ public class Window extends JFrame implements Runnable {
 //                //
 //            }
         }
+        this.dispose();
     }
 }
