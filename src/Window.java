@@ -12,6 +12,8 @@ public class Window extends JFrame implements Runnable {
     public PlayerController playerController;
     public AIController aiController;
     public BallController ballController;
+    public Text leftScoreText, rightScoreText;
+    public int leftScore, rightScore;
 
     public Window(){
         this.setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
@@ -29,11 +31,17 @@ public class Window extends JFrame implements Runnable {
 
         player = new Rect(30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
         ai = new Rect(Constants.SCREEN_WIDTH-Constants.PLAYER_WIDTH-30,100,Constants.PLAYER_WIDTH,Constants.PLAYER_HEIGHT,Color.WHITE);
-        ball = new Rect(Constants.SCREEN_WIDTH/2,Constants.SCREEN_HEIGHT/2,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
+        ball = new Rect(Constants.SCREEN_WIDTH/2.0,Constants.SCREEN_HEIGHT/2.0,Constants.BALL_WIDTH,Constants.BALL_WIDTH,Color.WHITE);
 
         playerController = new PlayerController(player, inputHandler);
         aiController = new AIController(ai, ball);
-        ballController = new BallController(ball, player, ai);
+        ballController = new BallController(ball, player, ai, this);
+
+        leftScore = 0;
+        rightScore = 0;
+
+        leftScoreText = new Text(leftScore, new Font("Times New Roman", Font.BOLD, Constants.TEXT_SIZE), player.x + Constants.TEXT_SIZE, Constants.TEXT_Y);
+        rightScoreText = new Text(rightScore, new Font("Times New Roman", Font.BOLD, Constants.TEXT_SIZE), ai.x - Constants.TEXT_SIZE, Constants.TEXT_Y);
     }
 
     public void update(double dt){
@@ -53,9 +61,28 @@ public class Window extends JFrame implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
 
+        leftScoreText.draw(g);
+        rightScoreText.draw(g);
+
         player.draw(g);
         ai.draw(g);
         ball.draw(g);
+    }
+
+    public void updateScore(Rect paddle){
+        if (player.equals(paddle)) {
+            leftScore++;
+            leftScoreText.text = "" + leftScore;
+            if (leftScore >= Constants.WIN_SCORE){
+                System.out.println("You won");
+            }
+        } else if (ai.equals(paddle)) {
+            rightScore++;
+            rightScoreText.text = "" + rightScore;
+            if (rightScore >= Constants.WIN_SCORE){
+                System.out.println("AI won");
+            }
+        }
     }
 
     @Override

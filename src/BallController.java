@@ -1,14 +1,16 @@
 public class BallController {
 
     Rect ball, leftPaddle, rightPaddle;
+    Window window;
 
     private double xVelocity = -100.0;
     private double yVelocity = 1.0;
 
-    public BallController(Rect ball, Rect leftPaddle, Rect rightPaddle){
+    public BallController(Rect ball, Rect leftPaddle, Rect rightPaddle, Window window){
         this.ball = ball;
         this.leftPaddle = leftPaddle;
         this.rightPaddle = rightPaddle;
+        this.window = window;
     }
 
     public void update(double dt){
@@ -16,13 +18,21 @@ public class BallController {
             if (checkCollision(leftPaddle)) {
                 calculateNewVelocity(leftPaddle);
             }else if (this.ball.x < this.leftPaddle.x){
-                System.out.println("AI + 1");
+                window.updateScore(rightPaddle);
+                this.ball.x = Constants.SCREEN_WIDTH/2.0;
+                this.ball.y = Constants.SCREEN_HEIGHT/2.0;
+                xVelocity = 100.0;
+                yVelocity = 1.0;
             }
         }else{
             if (checkCollision(rightPaddle)) {
                 calculateNewVelocity(rightPaddle);
             }else if (this.ball.x + this.ball.width > this.rightPaddle.x + this.rightPaddle.width){
-                System.out.println("Player + 1");
+                window.updateScore(leftPaddle);
+                this.ball.x = Constants.SCREEN_WIDTH/2.0;
+                this.ball.y = Constants.SCREEN_HEIGHT/2.0;
+                xVelocity = -100.0;
+                yVelocity = 1.0;
             }
         }
 
